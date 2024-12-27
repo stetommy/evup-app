@@ -1,0 +1,190 @@
+'use client';
+
+// Chakra imports
+import {
+  Alert,
+  AlertIcon,
+  Badge,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Icon,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
+
+// Custom components
+import React, { useState, useEffect } from 'react';
+import { useGetPublishedEventsQuery } from 'features/events/eventsApi';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+
+export default function Page() {
+  // Chakra Color Mode
+  const paleGray = useColorModeValue('secondaryGray.400', 'whiteAlpha.100');
+  const textColor = useColorModeValue('navy.700', 'white');
+  const bgBadge = useColorModeValue('secondaryGray.300', 'whiteAlpha.50');
+  const textBrand = useColorModeValue('brand.500', 'white');
+  const mainText = useColorModeValue('navy.700', 'white');
+  const { data: Events } = useGetPublishedEventsQuery(null);
+
+  const { user } = useSelector((state: any) => state.auth);
+  const { push } = useRouter();
+
+  const [passwordChangeModal, setPasswordChangeModal] = useState(false);
+
+  const onClose = () => {
+    setPasswordChangeModal(false);
+  };
+
+  useEffect(() => {
+    if (user?.changePassword === true) {
+      setPasswordChangeModal(true);
+      push('/user/profile/settings');
+    }
+  }, [user]);
+
+  console.log('Events:', Events);
+
+
+  return (
+    <>
+      <Text
+        color={mainText}
+        bg='inherit'
+        borderRadius='inherit'
+        fontWeight='bold'
+        fontSize='34px'
+        _hover={{ color: { mainText } }}
+        _active={{
+          bg: 'inherit',
+          transform: 'none',
+          borderColor: 'transparent',
+        }}
+        _focus={{
+          boxShadow: 'none',
+        }}
+      >
+        Eventi in programma
+      </Text>
+      <Box mt='100px'>
+        <>
+          <Modal isOpen={passwordChangeModal} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Devi cambiare la password</ModalHeader>
+              <ModalBody>
+                Ti stiamo reindirizzando alla pagina del profilo...
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap='20px'>
+          {Events &&
+            Events.length > 0 &&
+            Events?.map((event: any, idx: any) => (
+              <Box key={idx}>
+                <Card p='20px' h='full'>
+                  <Flex direction={{ base: 'column' }}>
+                    <Image
+                      src={event?.picture_url || '/img/applications/kanban1.png'}
+                      alt={event?.title || 'Evento'}
+                      boxSize='200px'
+                      borderRadius='20px'
+                    />
+                    <Flex
+                      justify='space-between'
+                      flexDirection='column'
+                      mb='auto'
+                      py='30px'
+                      pb={{ base: '0px', md: '0px' }}
+                    >
+                      <Flex flexDirection='column' mb='25px' textAlign='center'>
+                        <Text
+                          color={textColor}
+                          fontSize={{
+                            base: 'xl',
+                            md: 'xl',
+                            xl: 'xl',
+                            '2xl': '28px',
+                          }}
+                          mb='10px'
+                          fontWeight='700'
+                        >
+                          {event?.title}
+                        </Text>
+                        <Text
+                          color='secondaryGray.600'
+                          fontSize={{
+                            base: 'md',
+                          }}
+                          fontWeight='400'
+                          me='14px'
+                          style={{
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: 3,
+                            whiteSpace: 'normal',
+                          }}
+                        >
+                          {event?.description}
+                        </Text>
+                      </Flex>
+                      <Flex w='100%' flexWrap='wrap' justifyContent='center'>
+                        {event?.tags?.map((tag: any, key: any) => (
+                          <Badge
+                            key={key}
+                            bg={bgBadge}
+                            textAlign='center'
+                            mb={{ base: '20px', md: '0px' }}
+                            color={textBrand}
+                            me='10px'
+                            h='max-content'
+                          >
+                            {tag.name}
+                          </Badge>
+                        ))}
+                      </Flex>
+                      <Flex mt='5' w='100%' justifyContent='space-between'>
+                        <Text color={textColor} fontSize='sm' fontWeight='500'>
+                          Inizio: {new Date(event?.time_start).toLocaleString()}
+                        </Text>
+                        <Text color={textColor} fontSize='sm' fontWeight='500'>
+                          Fine: {new Date(event?.time_end).toLocaleString()}
+                        </Text>
+                      </Flex>
+                      <Flex justifyContent='center' mt='20px'>
+                        <Button
+                          bg='brand.500'
+                          color='white'
+                          onClick={() => {
+                            if (event?.slug) {
+                              push(`/user/event/${event.slug}`);
+                            } else {
+                              alert('Slug non disponibile per questo evento.');
+                            }
+                          }}
+                        >
+                          Maggiori dettagli
+                        </Button>
+
+                      </Flex>
+                    </Flex>
+                  </Flex>
+                </Card>
+              </Box>
+            ))}
+        </SimpleGrid>
+      </Box>
+    </>
+  );
+}
