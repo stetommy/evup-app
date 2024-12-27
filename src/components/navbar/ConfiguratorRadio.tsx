@@ -5,9 +5,18 @@ import {
   useColorModeValue,
   Radio,
   useRadio,
+  UseRadioProps,
 } from '@chakra-ui/react';
-// Assets
-export default function HeaderLinks(props: { [x: string]: any }) {
+import React from 'react';
+
+// Component
+type HeaderLinksProps = UseRadioProps & {
+  label: string;
+  active?: boolean;
+  children?: React.ReactNode;
+};
+
+export default function HeaderLinks(props: HeaderLinksProps) {
   const borderButton = useColorModeValue('secondaryGray.100', 'whiteAlpha.200');
   const activeShadow = useColorModeValue(
     '0px 18px 40px rgba(112, 144, 176, 0.22)',
@@ -15,30 +24,35 @@ export default function HeaderLinks(props: { [x: string]: any }) {
   );
   const Bg = useColorModeValue('white', 'navy.700');
   const activeBg = useColorModeValue('#F7F9FF', 'whiteAlpha.100');
-  //eslint-disable-next-line
-  const { getInputProps, getCheckboxProps } = useRadio(props);
+
+  // Hook useRadio
+  const { getInputProps, getRadioProps } = useRadio(props);
+
+  // Props per l'input e il bottone
   const input = getInputProps();
+  const radio = getRadioProps();
+
   return (
     <Button
-      h='max-content'
-      py='16px'
-      border='1px solid'
-      display={'flex'}
-      flexDirection='column'
-      bg={props.active === true ? Bg : 'transparent'}
-      boxShadow={props.active === true ? activeShadow : 'none'}
+      {...radio} // Passa le props del radio al bottone
+      h="max-content"
+      py="16px"
+      border="1px solid"
+      display="flex"
+      flexDirection="column"
+      bg={props.active ? Bg : 'transparent'}
+      boxShadow={props.active ? activeShadow : 'none'}
       _hover={{ background: Bg, boxShadow: activeShadow }}
       _focus={{ background: Bg, boxShadow: activeShadow }}
       _active={{ background: activeBg, boxShadow: activeShadow }}
       borderColor={borderButton}
-      onClick={props.onClick}
-      as='label'
+      as="label"
       px={{ base: '10px', md: 'none' }}
     >
-      <input {...input} />
-      <Flex w='100%' justifyContent={'space-between'} mb='10px'>
+      <input {...input} style={{ display: 'none' }} />
+      <Flex w="100%" justifyContent="space-between" mb="10px">
         {props.label}
-        <Radio colorScheme='brand' isChecked={props.active} />
+        <Radio colorScheme="brand" isChecked={props.active} />
       </Flex>
       {props.children}
     </Button>
