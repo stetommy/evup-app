@@ -2,14 +2,11 @@
 
 // Chakra imports
 import {
-  Alert,
-  AlertIcon,
   Badge,
   Box,
   Button,
   Card,
   Flex,
-  Icon,
   Image,
   Modal,
   ModalBody,
@@ -26,15 +23,16 @@ import React, { useState, useEffect } from 'react';
 import { useGetPublishedEventsQuery } from 'features/events/eventsApi';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import MapFullEventComponent from 'components/map/MapFullEventComponent';
 
 export default function Page() {
   // Chakra Color Mode
-  const paleGray = useColorModeValue('secondaryGray.400', 'whiteAlpha.100');
   const textColor = useColorModeValue('navy.700', 'white');
   const bgBadge = useColorModeValue('secondaryGray.300', 'whiteAlpha.50');
   const textBrand = useColorModeValue('brand.500', 'white');
   const mainText = useColorModeValue('navy.700', 'white');
-  const { data: Events } = useGetPublishedEventsQuery(null);
+ // Query per eventi
+ const { data: Events, isLoading, isError } = useGetPublishedEventsQuery(null);
 
   const { user } = useSelector((state: any) => state.auth);
   const { push } = useRouter();
@@ -52,9 +50,15 @@ export default function Page() {
     }
   }, [user]);
 
-  console.log('Events:', Events);
+  //console.log('Events:', Events);
 
+  if (isLoading) {
+    return <Text>Caricamento eventi in corso...</Text>;
+  }
 
+  if (isError || !Events) {
+    return <Text>Errore nel caricamento degli eventi o nessun evento disponibile.</Text>;
+  }
   return (
     <>
       <Text
@@ -73,8 +77,9 @@ export default function Page() {
           boxShadow: 'none',
         }}
       >
-        Eventi in programma
+        Ecco i prossimi eventi in programma
       </Text>
+      <MapFullEventComponent events={Events} zoom={14} />
       <Box mt='100px'>
         <>
           <Modal isOpen={passwordChangeModal} onClose={onClose}>
@@ -95,7 +100,7 @@ export default function Page() {
                 <Card p='20px' h='full'>
                   <Flex direction={{ base: 'column' }}>
                     <Image
-                      src={event?.picture_url || '/img/applications/kanban1.png'}
+                      src={event?.picture_url || '/img/applications/course.png'}
                       alt={event?.title || 'Evento'}
                       boxSize='200px'
                       borderRadius='20px'

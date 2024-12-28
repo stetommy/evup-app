@@ -18,7 +18,6 @@ import { SidebarContext } from 'contexts/SidebarContext';
 import { userLoggedIn } from 'features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import { authApi } from 'features/auth/authApi';
-import { useRouter } from 'next/router';
 
 // Assets
 export default function AuthNavbar(props: {

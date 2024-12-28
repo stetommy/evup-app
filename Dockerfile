@@ -22,6 +22,6 @@ EXPOSE 3000
 # Start the app  
 CMD ["npm", "start"] 
 
-# docker build -t evup-app:0.0.2 .
+# docker build --platform linux/amd64 -t evup-app:0.0.2 .
 # docker tag evup-app:0.0.2 stetommy/evup-app:0.0.2
 # docker push stetommy/evup-app:0.0.2

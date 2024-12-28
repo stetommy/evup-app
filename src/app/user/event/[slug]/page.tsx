@@ -13,13 +13,15 @@ import {
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useGetEventBySlugQuery } from 'features/events/eventsApi';
+import MapComponent from 'components/map/MapComponent';
 
 export default function EventDetailsPage() {
   const { slug } = useParams(); // Ottieni lo slug dinamico dalla URL
   const { push } = useRouter();
+  //const coords = { latitude: 40.7128, longitude: -74.0060 };
 
   // Debug per verificare lo slug
-  console.log('Slug:', slug);
+  //console.log('Slug:', slug);
 
   // Chakra Color Mode
   const textColor = useColorModeValue('navy.700', 'white');
@@ -44,18 +46,30 @@ export default function EventDetailsPage() {
   }
 
   // Debug per verificare i tags
-  console.log('Event tags:', event.tags);
+  //console.log('Event tags:', event.tags);
+  //console.log('Evento', event.coordinates)
 
   return (
     <Box mt="50px">
       <Card p="20px" borderRadius="20px">
         <Flex direction="column" align="center">
-          <Image
-            src={event.picture_id || '/img/applications/kanban1.png'}
-            alt={event.title || 'Evento'}
-            boxSize="300px"
-            borderRadius="20px"
-          />
+          <Flex w="100%" align="center" justify="center" gap="4">
+            <Image
+              src={event.picture_id || '/img/applications/course.png'}
+              alt={event.title || 'Evento'}
+              boxSize="300px"
+              borderRadius="20px"
+            />
+            {event.coordinates?.latitude && event.coordinates?.longitude ? (
+              <MapComponent
+                latitude={event.coordinates.latitude}
+                longitude={event.coordinates.longitude}
+                zoom={16}
+              />
+            ) : (
+              <Text color="red.500">Mappa non disponibile</Text>
+            )}
+          </Flex>
           <Text
             color={textColor}
             fontSize="3xl"

@@ -1,23 +1,25 @@
 'use client';
 import * as React from 'react';
-import Map from 'react-map-gl';
+import Map, { Marker } from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_TOKEN =
-  'pk.eyJ1Ijoic2ltbW1wbGUiLCJhIjoiY2wxeG1hd24xMDEzYzNrbWs5emFkdm16ZiJ9.q9s0sSKQFFaT9fyrC-7--g'; // Set your mapbox token her
-
-export default function MapComponent() {
+export default function MapComponent({ latitude, longitude, zoom = 14 }) {
   return (
     <Map
       initialViewState={{
-        latitude: 37.8,
-        longitude: -122.4,
-        zoom: 14,
+        latitude: latitude || 37.8, // Default latitude
+        longitude: longitude || -122.4, // Default longitude
+        zoom: zoom, // Default zoom
       }}
-      style={{ width: 800, height: 600 }}
-      mapStyle='mapbox://styles/mapbox/streets-v9'
-      mapboxAccessToken={MAPBOX_TOKEN}
-    ></Map>
+      style={{ width: 500, height: 400 }}
+      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+    >
+      {/* Aggiungi un Marker sulle coordinate */}
+      <Marker latitude={latitude || 37.8} longitude={longitude || -122.4}>
+        <div style={{ backgroundColor: 'blue', borderRadius: '50%', width: '15px', height: '15px' }}></div>
+      </Marker>
+    </Map>
   );
 }
