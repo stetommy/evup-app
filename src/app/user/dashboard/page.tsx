@@ -76,11 +76,14 @@ export default function Page() {
         _focus={{
           boxShadow: 'none',
         }}
+        mt={{ base: "3.75rem", md: "3rem" }}
+        mb={3}
       >
         Ecco i prossimi eventi in programma
       </Text>
-      <MapFullEventComponent events={Events} zoom={14} />
-      <Box mt='100px'>
+      <MapFullEventComponent events={Events} zoom={9} />
+      <Text color="blue.500" mt={4}>Clicca sul puntino blu per vedere le informazioni riguardanti l'evento!</Text>
+      <Box mt={4}>
         <>
           <Modal isOpen={passwordChangeModal} onClose={onClose}>
             <ModalOverlay />
@@ -98,7 +101,7 @@ export default function Page() {
             Events?.map((event: any, idx: any) => (
               <Box key={idx}>
                 <Card p='20px' h='full'>
-                  <Flex direction={{ base: 'column' }}>
+                  <Flex align="center" direction={{ base: 'column' }}>
                     <Image
                       src={event?.picture_url || '/img/applications/course.png'}
                       alt={event?.title || 'Evento'}

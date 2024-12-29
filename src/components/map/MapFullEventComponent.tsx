@@ -1,7 +1,6 @@
-'use client';
-
 import React, { useRef, useState, useEffect } from 'react';
 import Map, { Marker, Popup } from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css'; // Assicurati che gli stili di Mapbox siano caricati
 
 export default function MapFullEventComponent({ events = [], zoom = 14 }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -25,64 +24,83 @@ export default function MapFullEventComponent({ events = [], zoom = 14 }) {
   }, [events, zoom]);
 
   return (
-    <Map
-      initialViewState={{
-        latitude: mapState.current.latitude,
-        longitude: mapState.current.longitude,
-        zoom: mapState.current.zoom,
-      }}
-      style={{ width: '100%', height: '600px' }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      onMove={(event) => {
-        // Salva lo stato corrente della mappa
-        const { latitude, longitude, zoom } = event.viewState;
-        mapState.current = { latitude, longitude, zoom };
-      }}
-    >
-      {events.map((event, index) => {
-        // Verifica che l'evento abbia coordinate valide
-        const hasValidCoordinates =
-          event?.coordinates &&
-          typeof event.coordinates.latitude === 'number' &&
-          typeof event.coordinates.longitude === 'number';
+    <div className="map-container">
+      <Map
+        initialViewState={{
+          latitude: mapState.current.latitude,
+          longitude: mapState.current.longitude,
+          zoom: mapState.current.zoom,
+        }}
+        style={{ width: '100%', height: '600px' }}
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        onMove={(event) => {
+          // Salva lo stato corrente della mappa
+          const { latitude, longitude, zoom } = event.viewState;
+          mapState.current = { latitude, longitude, zoom };
+        }}
+      >
+        {events.map((event, index) => {
+          // Verifica che l'evento abbia coordinate valide
+          const hasValidCoordinates =
+            event?.coordinates &&
+            typeof event.coordinates.latitude === 'number' &&
+            typeof event.coordinates.longitude === 'number';
 
-        if (!hasValidCoordinates) {
-          console.warn(`Skipping event ${event?.title || 'Unnamed'} due to invalid coordinates.`);
-          return null;
-        }
+          if (!hasValidCoordinates) {
+            console.warn(`Skipping event ${event?.title || 'Unnamed'} due to invalid coordinates.`);
+            return null;
+          }
 
-        const { latitude, longitude } = event.coordinates;
+          const { latitude, longitude } = event.coordinates;
 
-        return (
-          <Marker
-            key={event._id || index}
-            latitude={latitude}
-            longitude={longitude}
-            onClick={(e) => {
-              e.originalEvent.stopPropagation();
-              setSelectedEvent(event);
-            }}
+          return (
+            <Marker
+              key={event._id || index}
+              latitude={latitude}
+              longitude={longitude}
+              onClick={(e) => {
+                e.originalEvent.stopPropagation();
+                setSelectedEvent(event);
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: 'blue',
+                  borderRadius: '50%',
+                  width: '10px',
+                  height: '10px',
+                  position: 'absolute',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              ></div>
+            </Marker>
+          );
+        })}
+
+        {selectedEvent && (
+          <Popup
+            latitude={selectedEvent.coordinates.latitude}
+            longitude={selectedEvent.coordinates.longitude}
+            onClose={() => setSelectedEvent(null)}
+            closeOnClick={false}
           >
-            {/* Simple custom marker */}
-            <div style={{ backgroundColor: 'blue', borderRadius: '50%', width: '10px', height: '10px' }}></div>
-          </Marker>
-        );
-      })}
+            <div>
+              <h3>{selectedEvent.title}</h3>
+              <p>{selectedEvent.description || 'No description available'}</p>
+            </div>
+          </Popup>
+        )}
+      </Map>
 
-      {selectedEvent && (
-        <Popup
-          latitude={selectedEvent.coordinates.latitude}
-          longitude={selectedEvent.coordinates.longitude}
-          onClose={() => setSelectedEvent(null)}
-          closeOnClick={false}
-        >
-          <div>
-            <h3>{selectedEvent.title}</h3>
-            <p>{selectedEvent.description || 'No description available'}</p>
-          </div>
-        </Popup>
-      )}
-    </Map>
+      <style jsx>{`
+        .map-container {
+          position: relative;
+          width: 100%;
+          height: 600px;
+          overflow: hidden;
+        }
+      `}</style>
+    </div>
   );
 }

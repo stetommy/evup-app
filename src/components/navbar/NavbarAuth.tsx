@@ -13,7 +13,7 @@ import Link from 'components/link/Link';
 import { MdOutlineLogout } from 'react-icons/md';
 
 // Custom components
-import { LvdereIcon } from 'components/icons/Icons';
+import { EvupIcon } from 'components/icons/Icons';
 import { SidebarContext } from 'contexts/SidebarContext';
 import { userLoggedIn } from 'features/auth/authSlice';
 import { useDispatch } from 'react-redux';
@@ -68,7 +68,7 @@ export default function AuthNavbar(props: {
         alignItems='center'
         justify='center'
       >
-        <LvdereIcon h='26px' w='175px' color={logoColor} />
+        <EvupIcon h='26px' w='175px' color={logoColor} />
       </Stack>
       <Text fontSize='sm' mt='3px'>
         {logoText}
@@ -87,7 +87,7 @@ export default function AuthNavbar(props: {
         alignItems='center'
         color={mainText}
       >
-        <LvdereIcon h='26px' w='175px' my='32px' color={logoColor} />
+        <EvupIcon h='26px' w='175px' my='32px' color={logoColor} />
       </Link>
     );
   }

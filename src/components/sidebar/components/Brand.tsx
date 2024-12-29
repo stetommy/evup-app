@@ -2,7 +2,7 @@
 import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Custom components
-import { LvdereLogo } from 'components/icons/Icons';
+import { EvupLogo } from 'components/icons/Icons';
 import { HSeparator } from 'components/separator/Separator';
 
 export function SidebarBrand(props: { mini: boolean; hovered: boolean }) {
@@ -12,7 +12,7 @@ export function SidebarBrand(props: { mini: boolean; hovered: boolean }) {
 
   return (
     <Flex alignItems='center' flexDirection='column'>
-      <LvdereLogo
+      <EvupLogo
         h='26px'
         w='175px'
         my='32px'

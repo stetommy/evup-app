@@ -4,7 +4,7 @@ import Map, { Marker } from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-export default function MapComponent({ latitude, longitude, zoom = 14 }) {
+export default function MapComponent({ latitude, longitude, zoom = 14, width= 500, height= 400}) {
   return (
     <Map
       initialViewState={{
@@ -12,7 +12,7 @@ export default function MapComponent({ latitude, longitude, zoom = 14 }) {
         longitude: longitude || -122.4, // Default longitude
         zoom: zoom, // Default zoom
       }}
-      style={{ width: 500, height: 400 }}
+      style={{ width: width, height: height }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
     >

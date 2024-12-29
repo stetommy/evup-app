@@ -1,8 +1,5 @@
 import { Icon } from '@chakra-ui/react';
 import {
-  MdDashboard,
-  MdPlayLesson,
-  MdClass,
   MdEvent,
 } from 'react-icons/md';
 // import { useSelector } from 'react-redux';
@@ -15,10 +12,10 @@ import { IRoute } from 'types/navigation';
 export const routes: IRoute[] = [
   /** --- Dashboards --- */
   {
-    name: 'Dashboard',
+    name: 'Eventi',
     layout: '/user',
     path: '/dashboard',
-    icon: <Icon as={MdDashboard} width='20px' height='20px' color='inherit' />,
+    icon: <Icon as={MdEvent} width='20px' height='20px' color='inherit' />,
     collapse: false,
   },
   /** --- Instructor --- */

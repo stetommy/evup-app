@@ -9,6 +9,7 @@ import {
   Text,
   Badge,
   useColorModeValue,
+  Center,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -50,24 +51,29 @@ export default function EventDetailsPage() {
   //console.log('Evento', event.coordinates)
 
   return (
-    <Box mt="50px">
+    <Box mt="80px">
       <Card p="20px" borderRadius="20px">
         <Flex direction="column" align="center">
-          <Flex w="100%" align="center" justify="center" gap="4">
+          <Flex align="center" justify="center" gap="4" direction={{ base: 'column', md: 'row' }}>
             <Image
               src={event.picture_id || '/img/applications/course.png'}
               alt={event.title || 'Evento'}
               boxSize="300px"
               borderRadius="20px"
+              mx="auto"
             />
             {event.coordinates?.latitude && event.coordinates?.longitude ? (
               <MapComponent
                 latitude={event.coordinates.latitude}
                 longitude={event.coordinates.longitude}
                 zoom={16}
+                height={300}
+                width={300}
               />
             ) : (
-              <Text color="red.500">Mappa non disponibile</Text>
+              <Text color="red.500" textAlign="center">
+                Mappa non disponibile
+              </Text>
             )}
           </Flex>
           <Text
