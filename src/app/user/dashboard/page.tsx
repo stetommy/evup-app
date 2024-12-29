@@ -82,7 +82,7 @@ export default function Page() {
         Ecco i prossimi eventi in programma
       </Text>
       <MapFullEventComponent events={Events} zoom={9} />
-      <Text color="blue.500" mt={4}>Clicca sul puntino blu per vedere le informazioni riguardanti l'evento!</Text>
+      <Text color="blue.500" mt={4}>Clicca sul puntino blu per vedere le informazioni riguardanti l&apos;evento!</Text>
       <Box mt={4}>
         <>
           <Modal isOpen={passwordChangeModal} onClose={onClose}>
