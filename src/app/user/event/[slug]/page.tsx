@@ -9,7 +9,6 @@ import {
   Text,
   Badge,
   useColorModeValue,
-  Center,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -56,16 +55,16 @@ export default function EventDetailsPage() {
         <Flex direction="column" align="center">
           <Flex align="center" justify="center" gap="4" direction={{ base: 'column', md: 'row' }}>
             <Image
-              src={event.picture_id || '/img/applications/course.png'}
-              alt={event.title || 'Evento'}
+              src={event?.data.picture_url || '/img/applications/course.png'}
+              alt={event.data.title || 'Evento'}
               boxSize="300px"
               borderRadius="20px"
               mx="auto"
             />
-            {event.coordinates?.latitude && event.coordinates?.longitude ? (
+            {event.data.coordinates?.latitude && event.data.coordinates?.longitude ? (
               <MapComponent
-                latitude={event.coordinates.latitude}
-                longitude={event.coordinates.longitude}
+                latitude={event.data.coordinates.latitude}
+                longitude={event.data.coordinates.longitude}
                 zoom={16}
                 height={300}
                 width={300}
@@ -83,7 +82,7 @@ export default function EventDetailsPage() {
             mt="20px"
             textAlign="center"
           >
-            {event.title || 'ND'}
+            {event.data.title || 'ND'}
           </Text>
           <Text
             color="secondaryGray.600"
@@ -91,7 +90,7 @@ export default function EventDetailsPage() {
             mt="10px"
             textAlign="center"
           >
-            {event.sbtitle || 'ND'}
+            {event.data.sbtitle || 'ND'}
           </Text>
           <Text
             color="secondaryGray.600"
@@ -99,10 +98,10 @@ export default function EventDetailsPage() {
             mt="10px"
             textAlign="center"
           >
-            {event.address || 'ND'}
+            {event.data.address || 'ND'}
           </Text>
           <Flex mt="20px" flexWrap="wrap" justifyContent="center">
-            {Array.isArray(event.tags) ? (
+            {Array.isArray(event.data.tags) ? (
               event.tags.map((tag: any, key: number) => (
                 <Badge
                   key={key}
@@ -123,29 +122,29 @@ export default function EventDetailsPage() {
                 me="10px"
                 h="max-content"
               >
-                {event.tags?.name || 'ND'}
+                {event.data.tags?.name || 'ND'}
               </Badge>
             )}
           </Flex>
           <Flex direction="column" align="center" mt="20px">
             <Text color={textColor} fontSize="md" fontWeight="500">
-              Ospite Speciale: {event.special_guest?.name || 'ND'}
+              Ospite Speciale: {event.data.special_guest?.name || 'ND'}
             </Text>
           </Flex>
           <Flex w="100%" justifyContent="space-between" mt="20px">
             <Text color={textColor} fontSize="sm" fontWeight="500">
-              Inizio: {event.time_start ? new Date(event.time_start).toLocaleString() : 'ND'}
+              Inizio: {event.data.time_start ? new Date(event.data.time_start).toLocaleString() : 'ND'}
             </Text>
             <Text color={textColor} fontSize="sm" fontWeight="500">
-              Fine: {event.time_end ? new Date(event.time_end).toLocaleString() : 'ND'}
+              Fine: {event.data.time_end ? new Date(event.data.time_end).toLocaleString() : 'ND'}
             </Text>
           </Flex>
           <Flex direction="column" align="center" mt="20px">
             <Text color={textColor} fontSize="sm" fontWeight="500">
-              Creato da: {event.created_by || 'ND'}
+              Creato da: {event.data.created_by || 'ND'}
             </Text>
             <Text color={textColor} fontSize="sm" fontWeight="500">
-              Ultimo Aggiornamento: {event.update_on ? new Date(event.update_on).toLocaleString() : 'ND'}
+              Ultimo Aggiornamento: {event.data.update_on ? new Date(event.data.update_on).toLocaleString() : 'ND'}
             </Text>
           </Flex>
           <Button mt="20px" bg="brand.500" color="white" onClick={() => push('/user/dashboard')}>
